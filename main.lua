@@ -124,13 +124,18 @@ function drawActivePiece()
 		for x = 1, width do
 			local n = activePiece.data[y][x]
 			if n == 1 then
-				love.graphics.rectangle("line",
+				love.graphics.rectangle("fill",
 					x * tileSize + activePiece.x * tileSize,
 					y * tileSize + activePiece.y * tileSize,
 					tileSize, tileSize)
 			end
 		end
 	end
+
+	-- love.graphics.setColor(255, 0, 0, 100)
+	-- love.graphics.rectangle("line", (1 + activePiece.x) * tileSize,
+		-- (1 + activePiece.y) * tileSize, #activePiece.data[1] * tileSize,
+		-- #activePiece.data * tileSize)
 end
 
 function getRandomPiece()
@@ -159,14 +164,11 @@ function addActivePieceToGrid()
 			local n = grid[y][x]
 
 			if n == 1 and y - (activePiece.y + activeHeight) == 1
-			and x >= activePiece.x and x <= activePiece.x + activeWidth then
-				for i = 1, activeWidth do
-					for j = 1, activeHeight do
-						local z = activePiece.data[j][i]
-
-						if z == 1 then
-							return true 
-						end
+			and x >= activePiece.x + 1 and x < activePiece.x + 1 + activeWidth then
+				for i = 1, #activePiece.data[#activePiece.data] do
+					print(activePiece.x + i == x, activePiece.x + i, x)
+					if activePiece.data[#activePiece.data][i] == 1 and activePiece.x + i == x then
+						return true
 					end
 				end
 			end
@@ -211,6 +213,8 @@ end
 function love.keypressed(key)
 	if key == "escape" then
 		love.event.quit()
+	elseif key == "r" then
+		love.event.quit("restart")
 	end
 	if key == "right" then
 		moveActivePieceX(1)
